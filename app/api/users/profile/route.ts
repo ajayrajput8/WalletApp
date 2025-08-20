@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         wallet: true,
       },
     });
-
+    console.log('User Profile:', user);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
