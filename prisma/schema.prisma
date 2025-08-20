@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String   @unique
+  name      String
+  firebaseUid String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  wallet    Wallet?
+  sentPayments     Payment[] @relation("SentPayments")
+  receivedPayments Payment[] @relation("ReceivedPayments")
+  
+  @@map("users")
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  balance   Float    @default(100.0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sentPayments     Payment[] @relation("FromWallet")
+  receivedPayments Payment[] @relation("ToWallet")
+  
+  @@map("wallets")
+}
+
+model Payment {
+  id           String        @id @default(cuid())
+  fromUserId   String
+  toUserId     String
+  fromWalletId String
+  toWalletId   String
+  amount       Float
+  description  String?
+  status       PaymentStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  fromUser   User   @relation("SentPayments", fields: [fromUserId], references: [id])
+  toUser     User   @relation("ReceivedPayments", fields: [toUserId], references: [id])
+  fromWallet Wallet @relation("FromWallet", fields: [fromWalletId], references: [id])
+  toWallet   Wallet @relation("ToWallet", fields: [toWalletId], references: [id])
+  
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
