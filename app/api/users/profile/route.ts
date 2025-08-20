@@ -14,13 +14,15 @@ export async function GET(request: NextRequest) {
     console.log("DATABASE_URL:", databaseUrl);
     
     const authorization = request.headers.get('Authorization');
+
     if (!authorization?.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const token = authorization.split('Bearer ')[1];
     const decodedToken = await adminAuth.verifyIdToken(token);
-
+    
+    console.log('Decoded Token:', decodedToken);
     const user = await prisma.user.findUnique({
       where: { firebaseUid: decodedToken.uid },
       include: {
