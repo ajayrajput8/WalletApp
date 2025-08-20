@@ -6,6 +6,13 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
+    const databaseUrl = process.env.DATABASE_URL;
+  
+    if (!databaseUrl) {
+      console.log("DATABASE_URL is not set!");
+    }
+    console.log("DATABASE_URL:", databaseUrl);
+    
     const authorization = request.headers.get('Authorization');
     if (!authorization?.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
