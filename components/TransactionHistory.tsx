@@ -13,8 +13,8 @@ interface Transaction {
   description?: string;
   status: string;
   createdAt: string;
-  fromUser: { id: string; name: string; phone: string };
-  toUser: { id: string; name: string; phone: string };
+  fromUser: { id: string; name: string; phone: string ,firebaseUid: string};
+  toUser: { id: string; name: string; phone: string ,firebaseUid: string};
   fromUserId: string;
   toUserId: string;
 }
@@ -91,7 +91,7 @@ export function TransactionHistory({ refreshTrigger }: TransactionHistoryProps) 
         ) : (
           <div className="space-y-4">
             {transactions.map((transaction) => {
-              const isReceived = transaction.toUser?.firebaseUid === user?.uid;
+              const isReceived = transaction.toUser.firebaseUid === user?.uid;
               console.log(transaction.toUserId, user?.uid);
               const otherUser = isReceived ? transaction.fromUser : transaction.toUser;
 

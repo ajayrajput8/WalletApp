@@ -66,8 +66,8 @@ export async function POST(request: NextRequest) {
         data: {
           fromUserId: sender.id,
           toUserId: recipient.id,
-          fromWalletId: sender?.wallet.id,
-          toWalletId: recipient?.wallet.id,
+          fromWalletId: sender.wallet!.id,
+          toWalletId: recipient?.wallet!.id,
           amount,
           description: description || 'Money transfer',
           status: 'COMPLETED',
@@ -75,12 +75,12 @@ export async function POST(request: NextRequest) {
       });
 
       await tx.wallet.update({
-        where: { id: sender.wallet.id },
+        where: { id: sender.wallet!.id },
         data: { balance: { decrement: amount } },
       });
 
       await tx.wallet.update({
-        where: { id: recipient.wallet.id },
+        where: { id: recipient.wallet!.id },
         data: { balance: { increment: amount } },
       });
 
