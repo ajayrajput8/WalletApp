@@ -1,14 +1,8 @@
-'use client';
+{/*'use client';
 
 import { useToast } from '@/hooks/use-toast';
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from '@/components/ui/toast';
+import { Toaster } from '@/components/ui/toast';
+
 
 export function Toaster() {
   const { toasts } = useToast();
@@ -33,3 +27,6 @@ export function Toaster() {
     </ToastProvider>
   );
 }
+*/}
+
+//this is empty because the Toaster component is already defined in components/ui/toast.tsx
